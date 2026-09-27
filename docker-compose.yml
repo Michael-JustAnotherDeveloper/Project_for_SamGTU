@@ -70,6 +70,22 @@ services:
     
     networks: [app]
   
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
+    restart: unless-stopped
+
+    environment:
+      ELASTICSEARCH_HOSTS: ${ES_URL}
+    ports:
+      - ${KIBANA_PORT}:${KIBANA_PORT}
+    networks: [app]
+
+    depends_on:
+      elastic_db:
+        condition: service_healthy
+
+  
   graph_db:
     image: neo4j:5.22
     container_name: graph
@@ -101,7 +117,7 @@ services:
       - .env
 
     ports:
-      - 8000:8000
+      - ${ADMIN_PORT}:${ADMIN_PORT}
     
     depends_on:
       - backend
