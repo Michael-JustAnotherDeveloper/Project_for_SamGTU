@@ -1,4 +1,4 @@
-# WikiGraph  (demo)
+# WikiGraph MVP
 ![CI](https://github.com/Michael-JustAnotherDeveloper/WikiGraph/actions/workflows/backend.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -6,6 +6,7 @@
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white)
 ![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-623CE4?style=for-the-badge&logo=terraform&logoColor=white)
 ![Превью](previews/preview.gif)
 
 Пользователь ищет статьи через граф связей, кликает по вершине и открывает HTML-страницу из объектного хранилища.
@@ -21,10 +22,21 @@ Neo4j, HTML-контент — в S3. Все три хранилища связ�
 - базово покрыт тестами, выстроен CI процесс, то есть инфраструктура в процессе развития
 
 ## Запуск
-в .env.example файле прописана тестовая рабочая конфигурация, но большинство S3 параметров - нерабочие заглушки, свой бакет вы сами должны настроить и заполнить "S3 блок" в .env, либо используйте MinIO
+Сперва нужно создать S3 хранилище. Заполните `secret_example.tfvars` своими значениями, затем:
+
+```bash
+mv secret_example.tfvars secret.tfvars
+terraform fmt && terraform init
+terraform plan -var-file="secret.tfvars"  # опционально
+terraform apply -var-file="secret.tfvars"
+```
+Заполните параметры .env.example с префиксом S3 данными созданного бакета (хранятся в разделе данные подключения), выполните:
+
 ```bash
 cp .env.example .env
 ```
+Запуск:
+
 ```bash
 sudo docker compose up -d   # в корне
 ```
@@ -120,3 +132,7 @@ python3 src/main.py
 - Для развития как DevOps инженер
 - Расширить свой стек
 - Научиться строить инфру
+
+
+## Контакты
+- Telegram: [@N_u_l_l_N_o_n_e](https://t.me/N_u_l_l_N_o_n_e)
