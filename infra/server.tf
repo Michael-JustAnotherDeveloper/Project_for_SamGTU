@@ -1,22 +1,14 @@
-variable "image_name" {
-  type    = string
-  default = "Ubuntu 22.04 LTS 64-bit"
-}
+resource "openstack_compute_flavor_v2" "flavor_1" {
+  name      = "custom-flavor-with-network-volume"
+  vcpus     = 2
+  ram       = 8192
+  disk      = 0
+  is_public = false
 
-variable "flavor_name" {
-  type        = string
-  default     = "SL2.2-4"
-  description = "2 CPU, 4 GB RAM"
-}
+  lifecycle {
+    create_before_destroy = true
+  }
 
-variable "vm_name" {
-  type    = string
-  default = "wikigraph-vm"
-}
-
-variable "network" {
-  type    = string
-  default = "internal"
 }
 
 # ssh-keygen
@@ -31,27 +23,42 @@ resource "local_file" "private_key" {
   file_permission = "0600"
 }
 
+
+# manage network
+resource "openstack_networking_network_v2" "network_1" {
+  name = "network_1"
+}
+
+# create port to vm
+resource "openstack_networking_port_v2" "vm_port" {
+  name       = "vm_port"
+  network_id = openstack_networking_network_v2.network_1.id
+}
+
+
 # create vm with internal network
 resource "openstack_compute_instance_v2" "server_1" {
   name            = var.vm_name
   region          = var.region
-  flavor_name     = var.flavor_name
-  keypair         = openstack_compute_keypair_v2.keypair.name
+  flavor_id       = openstack_compute_flavor_v2.flavor_1.id
+  image_id        = data.openstack_images_image_v2.ubuntu.id
+  key_pair        = openstack_compute_keypair_v2.keypair.name
   security_groups = [openstack_networking_secgroup_v2.web_secgroup.name]
   network {
-    name = var.network
+    name = "internal"
+    port = openstack_networking_port_v2.vm_port.id
   }
 }
 
 # getting floating_ip addr
 resource "openstack_networking_floatingip_v2" "floatip_1" {
-  pool = "public"
+  pool = "external-network"
 }
 
 
-# bind an IP to compute instance
+# bind an IP to vm port
 resource "openstack_networking_floatingip_associate_v2" "fip_1" {
   floating_ip = openstack_networking_floatingip_v2.floatip_1.address
-  instance_id = openstack_compute_instance_v2.id
+  port_id     = openstack_networking_port_v2.vm_port.id
 }
 
