@@ -1,4 +1,4 @@
-# WikiGraph MVP
+# WikiGraph
 ![CI](https://github.com/Michael-JustAnotherDeveloper/WikiGraph/actions/workflows/backend.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -19,12 +19,13 @@ Neo4j, HTML-контент — в S3. Все три хранилища связ�
 
 - можно использовать этот проект как основу для своей версии "WikiGraph" и построения своей базы знаний
 - удобная миграция данных (Понятный пример через админку)
-- базово покрыт тестами, выстроен CI процесс, то есть инфраструктура в процессе развития
+- покрыт тестами, выстроен CI процесс
 
 ## Запуск
-Сперва нужно создать S3 хранилище. Заполните `secret_example.tfvars` своими значениями, затем:
+Заполните `secret_example.tfvars` своими значениями (нужно для openstack провайдера), затем:
 
 ```bash
+cd infra
 mv secret_example.tfvars secret.tfvars
 terraform fmt && terraform init
 terraform plan -var-file="secret.tfvars"  # опционально
@@ -40,6 +41,9 @@ cp .env.example .env
 ```bash
 sudo docker compose up -d   # в корне
 ```
+
+## Минимальные требования к железу
+~ 8 ГБ RAM, 2 CPU; можно изменить в ./infra/server в ресурсе openstack_compute_flavor_v2.
 
 ## Архитектура запросов
 
