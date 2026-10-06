@@ -1,4 +1,12 @@
-# WikiGraph
+# SamGTU project
+
+# Это скопированный репозиторий одного из моих проектов. Он будет являться основой всего.
+
+# Открытые задачи и проблемы которые нужно решить будут указываться в: [issues.md](issues.md)
+
+## Ниже идет тех документация оригинала.
+
+
 ![CI](https://github.com/Michael-JustAnotherDeveloper/WikiGraph/actions/workflows/backend.yml/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
