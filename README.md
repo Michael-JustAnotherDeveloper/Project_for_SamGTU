@@ -148,3 +148,8 @@ python3 src/main.py
 
 ## Контакты
 - Telegram: [@N_u_l_l_N_o_n_e](https://t.me/N_u_l_l_N_o_n_e)
+
+
+## Спец инфо
+
+Имя remote - fork
